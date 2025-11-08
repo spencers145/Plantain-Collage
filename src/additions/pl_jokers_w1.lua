@@ -4,12 +4,13 @@ SMODS.Joker {
     extra = {chips = 80, chance = 4} },
   rarity = 1,
   atlas = 'pl_atlas_w1',
+  no_pool_flag = 'plantain_extinct',
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
   pos = { x = 0, y = 0 },
   cost = 4,
-  discovered = true,
+  discovered = false,
   pools = {
     Food = true
   },
@@ -50,7 +51,8 @@ SMODS.Joker {
                         return true; end})) 
                 return true
             end
-        })) 
+        }))
+        G.GAME.pool_flags.plantain_extinct = true
         return {
             message = localize('pl_plantain_cooked')
         }
@@ -79,10 +81,10 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 1, y = 0 },
   cost = 2,
-  discovered = true,
+  discovered = false,
   config = { extra = { Xmult = 1 } },
   loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.Xmult + (G.GAME.pl_postcards_sold or 0) } }
+    return { vars = { card.ability.extra.Xmult + ((G.GAME.pl_postcards_sold or 0) * 2) } }
   end,
   calculate = function(self, card, context)
     if context.selling_self then
@@ -91,8 +93,8 @@ SMODS.Joker {
     if context.joker_main and context.cardarea == G.jokers then
       if G.GAME.pl_postcards_sold ~= nil then
         return {
-          Xmult_mod = card.ability.extra.Xmult + G.GAME.pl_postcards_sold,
-          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.Xmult + G.GAME.pl_postcards_sold } }
+          Xmult_mod = card.ability.extra.Xmult + G.GAME.pl_postcards_sold * 2,
+          message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.Xmult + G.GAME.pl_postcards_sold*2 } }
         }
       end
     end
@@ -104,7 +106,7 @@ SMODS.Joker {
   rarity = 1,
   atlas = 'pl_atlas_w1',
   cost = 5,
-  discovered = true,
+  discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
@@ -147,8 +149,8 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 3, y = 0 },
   cost = 5,
-  discovered = true,
-  config = { extra = { mult = 5, chips = 25, bingo1 = 3, bingo2 = 7 } },
+  discovered = false,
+  config = { extra = { mult = 4, chips = 25, bingo1 = 3, bingo2 = 7 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.bingo1, card.ability.extra.bingo2, card.ability.extra.chips, card.ability.extra.mult } }
   end,
@@ -187,9 +189,9 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
+--[[SMODS.Joker {
   key = 'apple_pie',
-  config = { extra = { money = 6, money_loss = 1 } },
+  config = { extra = { money = 4, money_loss = 1, rounds_left = 4 } },
   rarity = 1,
   atlas = 'pl_atlas_w1',
   blueprint_compat = false,
@@ -197,7 +199,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 4, y = 0 },
   cost = 5,
-  discovered = true,
+  discovered = false,
   pools = {
     Food = true
   },
@@ -206,15 +208,14 @@ SMODS.Joker {
     return { vars = { card.ability.extra.money, card.ability.extra.money_loss } }
   end,
 
-  calc_dollar_bonus = function(self, card)
-    local bonus = card.ability.extra.money
-    if bonus > 0 then return bonus end
-  end,
-
   calculate = function(self, card, context)
+    if context.joker_main then
+      return { dollars = card.ability.extra.money }
+    end
     if context.pl_cash_out and not context.blueprint then
       card.ability.extra.money = card.ability.extra.money - card.ability.extra.money_loss
-      if card.ability.extra.money == 0 then
+      card.ability.extra.rounds_left = card.ability.extra.rounds_left - 1
+      if card.ability.extra.rounds_left == 0 then
         G.E_MANAGER:add_event(Event({
           func = function()
               play_sound('tarot1')
@@ -237,14 +238,14 @@ SMODS.Joker {
      end
     end
   end
-}
+}]]
 
 SMODS.Joker {
   key = 'grape_soda',
   rarity = 2,
   atlas = 'pl_atlas_w1',
   config = { extra = { should_destroy = true } },
-  discovered = true,
+  discovered = false,
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.should_destroy } }
   end,
@@ -286,7 +287,7 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
+--[[SMODS.Joker {
   key = 'matryoshka',
   config = { extra = { repetitions = 1 } },
   rarity = 2,
@@ -296,7 +297,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 1, y = 1 },
   cost = 6,
-  discovered = true,
+  discovered = false,
   calculate = function(self, card, context)
     if context.cardarea == G.play and context.repetition and not context.repetition_only then
       if next(context.poker_hands['Straight']) then
@@ -308,7 +309,7 @@ SMODS.Joker {
       end
     end
   end
-}
+}]]
 
 SMODS.Joker {
   key = 'jim',
@@ -320,7 +321,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 2, y = 1 },
   cost = 6,
-  discovered = true,
+  discovered = false,
   calculate = function(self, card, context)
     if context.cardarea == G.play and context.repetition then
       if context.other_card.ability.set ~= 'Enhanced' then
@@ -336,60 +337,17 @@ SMODS.Joker {
 }
 
 SMODS.Joker {
-  key = 'crystal_joker',
-  rarity = 2,
-  atlas = 'pl_atlas_w1',
-  discovered = true,
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  pos = { x = 3, y = 1 },
-  cost = 6,
-  enhancement_gate = 'm_stone',
-  loc_vars = function(self, info_queue, card)
-    info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
-  end,
-  calculate = function(self, card, context)
-    if context.after and context.cardarea == G.jokers then
-      local stone = false
-      for i = 1, #context.scoring_hand do
-        if context.scoring_hand[i].ability.effect == "Stone Card" then stone = true
-      end
-    end
-      if stone and (#G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit) then
-        G.GAME.consumeable_buffer = G.GAME.consumeable_buffer + 1
-        G.E_MANAGER:add_event(Event({
-          trigger = 'before',
-          delay = 0.0,
-          func = (function()
-                  local card = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'sup')
-                  card:add_to_deck()
-                  G.consumeables:emplace(card)
-                  G.GAME.consumeable_buffer = 0
-              return true
-          end)}))
-      return {
-          message = localize('k_plus_tarot'),
-          colour = G.C.SECONDARY_SET.Tarot,
-          card = card
-      }
-      end
-    end
-  end
-}
-
-SMODS.Joker {
   key = 'el_dorado',
-  config = { extra = { money_mod = 3 } },
-  rarity = 2,
-  discovered = true,
+  config = { extra = { money_mod = 2 } },
+  rarity = 3,
+  discovered = false,
   atlas = 'pl_atlas_w1',
   blueprint_compat = false,
   eternal_compat = true,
   perishable_compat = true,
   pos = { x = 4, y = 1 },
-  cost = 7,
-  enhancement_gate = 'm_wild',
+  cost = 8,
+  --enhancement_gate = 'm_wild',
 
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money_mod, PL_UTIL.wild_card_count() * card.ability.extra.money_mod } }
@@ -405,7 +363,7 @@ SMODS.Joker {
   key = 'black_cat',
   rarity = 2,
   atlas = 'pl_atlas_w1',
-  discovered = true,
+  discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
@@ -443,7 +401,7 @@ SMODS.Joker {
   key = 'mossy_joker',
   rarity = 3,
   atlas = 'pl_atlas_w1',
-  discovered = true,
+  discovered = false,
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
@@ -477,7 +435,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 2, y = 2 },
   cost = 8,
-  discovered = true,
+  discovered = false,
   config = { extra = { Xmult = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.Xmult } }
@@ -518,7 +476,7 @@ SMODS.Joker {
   perishable_compat = true,
   pos = { x = 3, y = 2 },
   cost = 7,
-  discovered = true,
+  discovered = false,
   config = { extra = { is_odd = 'pl_even', next_round = 'pl_odd', Xmult = 1.5} },
   loc_vars = function(self, info_queue, card)
     return { vars = { localize(card.ability.extra.is_odd), localize(card.ability.extra.next_round), card.ability.extra.Xmult} }
@@ -550,6 +508,7 @@ SMODS.Joker {
   end
 }
 
+--[[
 SMODS.Joker {
   key = 'raw_meat',
   rarity = 3,
@@ -563,7 +522,7 @@ SMODS.Joker {
   end,
   pos = { x = 4, y = 2 },
   cost = 9,
-  discovered = true,
+  discovered = false,
   pools = {
     Food = true
   },
@@ -582,4 +541,4 @@ SMODS.Joker {
       card_eval_status_text(card, 'jokers', nil, nil, nil, {message = localize('pl_raw_meat_ante_down'), colour = G.C.BLACK})
     end
   end
-}
+}]]

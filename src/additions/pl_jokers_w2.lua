@@ -1,113 +1,11 @@
 -- COMMONS
 
 SMODS.Joker {
-  key = 'croissant',
-  atlas = 'pl_atlas_w2',
-  pos = { x = 0, y = 0 },
-  
-  config = { extra = { upgrades_left = 4 } },
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.upgrades_left } }
-  end,
-
-  blueprint_compat = true,
-  eternal_compat = false,
-  perishable_compat = true,
-  discovered = true,
-
-  rarity = 1,
-  cost = 4,
-
-  pools = {
-    Food = true
-  },
-
-  calculate = function(self, card, context)
-    if context.using_consumeable and (context.consumeable.ability.set == "Planet") then
-      card_eval_status_text(context.blueprint_card or card, 'jokers', nil, nil, nil, {message = localize('k_again_ex'), colour = G.C.PLANET})
-      context.consumeable:use_consumeable(context.consumeable.area)
-      if not context.blueprint then
-        card.ability.extra.upgrades_left = card.ability.extra.upgrades_left - 1
-        if card.ability.extra.upgrades_left <= 0 then
-          G.E_MANAGER:add_event(Event({
-            func = function()
-                play_sound('tarot1')
-                card.T.r = -0.2
-                card:juice_up(0.3, 0.4)
-                card.states.drag.is = true
-                card.children.center.pinch.x = true
-                G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
-              func = function()
-                G.jokers:remove_card(self)
-                card:remove()
-                card = nil
-              return true; end})) 
-            return true
-          end
-          })) 
-          return {
-              message = localize('k_eaten_ex')
-          }
-        end
-      end
-    end
-  end
-}
-
-SMODS.Joker {
-  key = 'pop_up_joker',
-  atlas = 'pl_atlas_w2',
-  pos = { x = 1, y = 0 },
-  soul_pos = { x = 0, y = 2},
-  
-  config = { extra = { chance = 2 } },
-  loc_vars = function(self, info_queue, card)
-    return { vars = { (G.GAME.probabilities.normal or 1), card.ability.extra.chance} }
-  end,
-
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = true,
-  discovered = true,
-
-  rarity = 1,
-  cost = 4,
-
-  calculate = function(self, card, context)
-    if context.reroll_shop then
-      if #G.shop_booster.cards < G.GAME.starting_params.boosters_in_shop + (G.GAME.modifiers.extra_boosters or 0) then
-        if pseudorandom('popup') < G.GAME.probabilities.normal/card.ability.extra.chance then
-          G.E_MANAGER:add_event(Event {
-            func = function()
-              PL_UTIL.add_booster_pack()
-              return true
-            end
-          })
-
-          local pop_up_options = {
-            'pl_pop_up_joker_winner_1',
-            'pl_pop_up_joker_winner_2',
-            'pl_pop_up_joker_winner_3',
-            'pl_pop_up_joker_winner_4',
-          }
-
-          local pop_up_message = pop_up_options[ math.random( #pop_up_options ) ]
-    
-          return {
-            message = localize(pop_up_message),
-          }
-        end
-      end
-    end
-  end
-}
-
-SMODS.Joker {
   key = 'lamp',
   atlas = 'pl_atlas_w2',
   pos = { x = 2, y = 0 },
   
-  config = { extra = { mult = 3, mult_gain = 3, mult_loss = 1 } },
+  config = { extra = { mult = 3, mult_gain = 3, mult_loss = 2 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain, card.ability.extra.mult_loss } }
   end,
@@ -115,7 +13,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 1,
   cost = 5,
@@ -149,7 +47,7 @@ SMODS.Joker {
   atlas = 'pl_atlas_w2',
   pos = { x = 3, y = 0 },
   
-  config = { extra = { chips_mod = 5, chips = 0 } },
+  config = { extra = { chips_mod = 4, chips = 0 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.chips_mod, card.ability.extra.chips } }
   end,
@@ -157,7 +55,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 5,
@@ -193,13 +91,13 @@ SMODS.Joker {
     end
   end
 }
-
+--[[
 SMODS.Joker {
   key = 'hot_air_balloon',
   atlas = 'pl_atlas_w2',
   pos = { x = 4, y = 0 },
   
-  config = { extra = { money = 1, money_mod = 1, chance = 15 } },
+  config = { extra = { money = 1, money_mod = 1, chance = 12 } },
   loc_vars = function(self, info_queue, card)
     return { vars = { card.ability.extra.money, card.ability.extra.money_mod, (G.GAME.probabilities.normal or 1), card.ability.extra.chance } }
   end,
@@ -207,7 +105,7 @@ SMODS.Joker {
   blueprint_compat = false,
   eternal_compat = false,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 6,
@@ -247,7 +145,7 @@ SMODS.Joker {
       end
     end
   end
-}
+}]]
 
 SMODS.Joker {
   key = 'three_body_problem',
@@ -266,7 +164,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 6,
@@ -308,7 +206,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 6,
@@ -331,41 +229,6 @@ SMODS.Joker {
   end
 }
 
-SMODS.Joker {
-  key = 'painterly_joker',
-  atlas = 'pl_atlas_w2',
-  pos = { x = 2, y = 1 },
-  
-  config = { extra = { xmult_mod = 0.1, xmult = 1 } },
-  loc_vars = function(self, info_queue, card)
-    return { vars = { card.ability.extra.xmult_mod, card.ability.extra.xmult } }
-  end,
-
-  blueprint_compat = true,
-  eternal_compat = true,
-  perishable_compat = false,
-  discovered = true,
-
-  rarity = 2,
-  cost = 5,
-
-  calculate = function(self, card, context)
-    if context.joker_main and context.cardarea == G.jokers then
-      if card.ability.extra.xmult > 1 then
-        return 
-          {
-            Xmult_mod = card.ability.extra.xmult,
-            message = localize { type = 'variable', key = 'a_xmult', vars = { card.ability.extra.xmult } }
-          }
-      end
-    end
-    if context.pl_suit_changed and not context.blueprint then
-      card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_mod
-      card_eval_status_text(card, 'jokers', nil, nil, nil, {message = localize('k_upgrade_ex'), colour = G.C.MULT})
-    end
-  end
-}
-
 --RARES
 
 SMODS.Joker {
@@ -373,7 +236,7 @@ SMODS.Joker {
   atlas = 'pl_atlas_w2',
   pos = { x = 3, y = 1 },
   
-  config = { extra = { xmult_mod = 0.5, xmult = 1 } },
+  config = { extra = { xmult_mod = 0.25, xmult = 1 } },
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
     return { vars = { card.ability.extra.xmult_mod, card.ability.extra.xmult } }
@@ -382,17 +245,17 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = false,
-  discovered = true,
+  discovered = false,
 
   rarity = 3,
   cost = 6,
 
   calculate = function(self, card, context)
-    if context.cardarea == G.play and context.other_card and context.other_card.ability.effect == 'Stone Card' and context.individual and not context.blueprint then
+    if context.cardarea == G.play and context.other_card and (SMODS.has_enhancement(context.other_card,'m_stone') or SMODS.has_enhancement(context.other_card,'m_sarc_luminice')) and context.individual and not context.blueprint then
       card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_mod
       return { message = localize('k_upgrade_ex'), focus = card, colour = G.C.MULT}
     end
-    if context.destroying_card and context.destroying_card.ability.effect == 'Stone Card' and not context.blueprint then
+    if context.destroying_card and (SMODS.has_enhancement(context.destroying_card,'m_stone') or SMODS.has_enhancement(context.destroying_card,'m_sarc_luminice')) and not context.blueprint then
       return true
     end
     if context.joker_main and context.cardarea == G.jokers and card.ability.extra.xmult > 1 then
@@ -417,10 +280,10 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = false,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 3,
-  cost = 8,
+  cost = 5,
 
   pools = {
     Food = true

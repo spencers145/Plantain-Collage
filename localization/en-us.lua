@@ -26,7 +26,7 @@ return {
       j_pl_postcard = {
         name = 'Postcard',
         text = {
-          'Gains {X:mult,C:white}X1{} Mult for',
+          'Gains {X:mult,C:white}X2{} Mult for',
           'each {C:attention}Postcard{}',
           'sold this run',
           '{C:inactive}(Currently {X:mult,C:white} X#1# {C:inactive} Mult)',
@@ -35,27 +35,31 @@ return {
       j_pl_mini_crossword = {
         name = 'Mini Crossword',
         text = {
-          'Gains {C:mult}+#1#{} Mult if played hand',
+          {'Gains {C:mult}+#1#{} Mult if played hand',
           'has exactly {C:attention}#2#{} cards',
-          '{s:0.8}Chooses between 3, 4, or 5 every round',
-          '{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)'
+          '{C:inactive}(Currently {C:mult}+#3#{C:inactive} Mult)'},
+          {'Chooses between 3, 4,',
+          'or 5 cards every round'},
+          
         }
       },
       j_pl_bingo_card = {
         name = 'Bingo Card',
         text = {
-          'Each played {C:attention}#1#{} and {C:attention}#2#{}',
+          {'Each played {C:attention}#1#{} and {C:attention}#2#{}',
           'gives {C:chips}+#3#{} Chips and {C:mult}+#4#{} Mult',
-          'when scored, number cards',
-          'change every round'
+          'when scored'},
+          {'Ranks change every round',
+          '{C:inactive}(Number ranks only)'}
         }
       },
       j_pl_apple_pie = {
         name = 'Apple Pie',
         text = {
-          'Earn {C:money}$#1#{} at',
-          'end of round, and',
-          'decrease by {C:money}$#2#{}'
+          {'Earn {C:money}$#1#{} when',
+          'a hand is played'},
+          {'Decrease by {C:money}$#2#{}',
+          'after cashing out'},
         }
       },
       j_pl_grape_soda = {
@@ -87,7 +91,8 @@ return {
         name = 'Crystal Joker',
         text = {
           'If played hand contains',
-          'a {C:attention}Stone{} card, create',
+          'a {C:attention}Stone{}, {C:attention}Crystal{},',
+          'or {C:attention}Ore{} card, create',
           'a random {C:tarot}Tarot{} card'
         }
       },
@@ -161,10 +166,11 @@ return {
       j_pl_lamp = {
         name = 'Lamp',
         text = {
-          '{C:mult}+#2#{} Mult when',
-          '{C:attention}Joker{} card sold',
-          '{C:mult}-#3#{} Mult each round',
-          '{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)'
+          {'{C:mult}+#2#{} Mult when a',
+          '{C:attention}Joker{} card is sold',
+          '{C:inactive}(Currently {C:mult}+#1#{C:inactive} Mult)'},
+          {'{C:mult}-#3#{} Mult each round'}
+          
         }
       },
       j_pl_odd_sock = {
@@ -213,18 +219,19 @@ return {
       j_pl_quarry = {
         name = 'Quarry',
         text = {
-          'Gains {X:mult,C:white}X#1#{} Mult each time',
-          'a {C:attention}Stone{} card scores, destroy',
-          'all played {C:attention}Stone{} cards',
-          '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'
+          {'Scored {C:attention}Stone{} and {C:attention}Luminice{}',
+          'cards are destroyed'},
+          {'Each time this happens,',
+          'this Joker gains {X:mult,C:white}X#1#{} Mult',
+          '{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult)'}
         }
       },
       j_pl_lasagna = {
         name = 'Lasagna',
         text = {
-          '{X:mult,C:white}X#1#{} Mult,',
-          'loses {X:mult,C:white}X#2#{} Mult',
-          'per card {C:attention}sold'
+          {'{X:mult,C:white}X#1#{} Mult'},
+          {'Loses {X:mult,C:white}X#2#{} Mult',
+          'per card {C:attention}sold'}
         }
       },
       j_pl_early_man = {
