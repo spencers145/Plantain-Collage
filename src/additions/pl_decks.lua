@@ -3,15 +3,18 @@ if PL_UTIL.config.vouchers_enabled then
     key = 'sponsored',
     atlas = 'pl_atlas_decks',
     pos = { x = 0, y = 0 },
-    discovered = true,
+    unlocked = false,
     config = {
         vouchers = {
           'v_pl_ad_break'
         },
+        consumables = {
+          'c_vis_coupon'
+        }
       },
 
     apply = function(self, back)
-      change_shop_size(-1)
+      SMODS.change_voucher_limit(-1)
     end
   }
 end

@@ -8,13 +8,13 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = G.P_CENTERS.c_wheel_of_fortune
   end,
 
   rarity = 1,
-  cost = 3,
+  cost = 2,
 
   calculate = function (self, card, context)
     if context.setting_blind and not (context.blueprint_card or self).getting_sliced and #G.consumeables.cards + G.GAME.consumeable_buffer < G.consumeables.config.card_limit then
@@ -43,15 +43,15 @@ SMODS.Joker {
   atlas = 'pl_atlas_w3',
   pos = { x = 1, y = 0 },
 
-  config = { extra = { chips = 25 } },
+  config = { extra = { mult = 3 } },
   loc_vars = function(self, info_queue, card)
-    return {vars = { localize(card.ability.extra.suit, 'suits_singular'), card.ability.extra.chips, colours = {G.C.SUITS[card.ability.extra.suit]}}}
+    return {vars = { localize(card.ability.extra.suit, 'suits_singular'), card.ability.extra.mult, colours = {G.C.SUITS[card.ability.extra.suit]}}}
   end,
 
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 1,
   cost = 5,
@@ -65,9 +65,9 @@ SMODS.Joker {
   calculate = function (self, card, context)
     if context.cardarea == G.hand and not context.end_of_round and context.individual and not context.repetition and context.other_card:is_suit(card.ability.extra.suit) then
       return {
-        chip_mod = card.ability.extra.chips,
+        mult_mod = card.ability.extra.mult,
         card = context.other_card,
-        message = localize { type = 'variable', key = 'a_chips', vars = { card.ability.extra.chips } }
+        message = localize { type = 'variable', key = 'a_mult', vars = { card.ability.extra.mult } }
       }
     end
     if context.end_of_round and not context.repetition and not context.individual then
@@ -99,7 +99,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 2,
   cost = 6,
@@ -138,7 +138,7 @@ SMODS.Joker {
   atlas = 'pl_atlas_w3',
   pos = { x = 3, y = 0 },
 
-  config = { extra = { mult = 11 } },
+  config = { extra = { mult = 8 } },
   loc_vars = function(self, info_queue, card)
     return {vars = { card.ability.extra.mult }}
   end,
@@ -146,21 +146,23 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
-  rarity = 2,
-  cost = 6,
+  rarity = 1,
+  cost = 5,
 
   calculate = function(self, card, context)
     if context.individual and context.cardarea == G.play then
       local rank = context.other_card:get_id()
-      if rank == 11 or rank == 12 or rank == 13 then rank = 10 end
-      if rank == 14 then rank = 11 end
-      local new_mult = card.ability.extra.mult - rank
-      return {
-        mult = new_mult,
-        card = card
-      }
+      --if rank == 11 or rank == 12 or rank == 13 then rank = 10 end
+      --if rank == 14 then rank = 11 end
+      local new_mult = math.max(card.ability.extra.mult - rank, 0)
+      if new_mult > 0 then
+        return {
+          mult = new_mult,
+          card = card
+        }
+      end
     end
   end
 }
@@ -185,7 +187,7 @@ SMODS.Joker {
   blueprint_compat = true,
   eternal_compat = true,
   perishable_compat = true,
-  discovered = true,
+  discovered = false,
 
   rarity = 3,
   cost = 8,

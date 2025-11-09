@@ -5,8 +5,14 @@ return {
         name = "Sponsored Deck",
         text = {
           'Start run with',
-          '{C:attention,T:v_pl_ad_break}Ad Break{},',
-          '{C:attention}-1{} shop slot'
+          '{C:attention,T:v_pl_ad_break}Ad Break{} and a {C:attention,T:c_vis_coupon}Coupon',
+          '{s:0.2} {}',
+          '{C:attention}-1{} voucher in shop'
+        },
+        unlock = {
+          'Redeem enough {C:attention}Vouchers',
+          'to reach a base reroll',
+          'cost of {C:money}$0'
         }
       },
     },
@@ -245,10 +251,11 @@ return {
       j_pl_archaeologist = {
         name = 'Archaeologist',
         text = {
-          'Each card held in',
+          {'Each card held in',
           'hand with {V:1}#1#{} suit',
-          'gives {C:chips}+#2#{} Chips,',
-          '{s:0.8}suit changes at end of round'
+          'gives {C:mult}+#2#{} Mult'},
+          {'Suit changes at',
+          'end of round'}
         }
       },
       j_pl_game_cartridge = {
@@ -262,10 +269,9 @@ return {
       j_pl_dunce = {
         name = 'Dunce',
         text = {
-          'Played cards give',
-          '{C:mult}+#1#{} Mult',
-          '{C:attention}minus their rank',
-          'when scored'
+          'Played cards give {C:mult}+#1#{} Mult',
+          '{C:attention}minus their rank{} when scored',
+          '{C:inactive}(Minimum of {C:mult}0{C:inactive} Mult)'
         }
       },
       j_pl_extraterrestrial_joker = {
@@ -315,15 +321,17 @@ return {
       v_pl_ad_break = {
         name = 'Ad Break',
         text = {
-          '{C:attention}+1{} pack',
-          'available in shop'
+          {'Reroll the leftmost {C:attention}unopened',
+          'booster pack on reroll'},
+          {'Rerolls cost',
+          '{C:money}$#1#{} less'}
         }
       },
       v_pl_product_placement = {
         name = 'Product Placement',
         text = {
           'Reroll all {C:attention}unopened',
-          'packs on reroll'
+          'booster packs on reroll'
         }
       },
     },
